@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+python-multipart
+argon2-cffi
+itsdangerous
+python-dotenv
+chromadb
+pypdf
+python-docx
+httpx

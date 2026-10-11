@@ -1,0 +1,4 @@
+.env
+conflux.db
+chroma_data/
+__pycache__/

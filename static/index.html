@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agent Conflux 2.1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+:root{--bg:#050506;--s1:#101013;--s2:#17171c;--s3:#202027;--line:#2b2b33;--line2:#5c5c68;--ink:#fff;--soft:#b6b6c2;--cy:#22d3ee;--cy-d:#0ea5c2;--lime:#dceeb1;--lilac:#c5b0f4;--cream:#f4ecd6;--pink:#efd4d4;--mint:#c8e6cd;--coral:#f3c9b6;--navy:#1f1d3d;--err:#ff9a9a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*,*::before,*::after{box-sizing:inherit}
+*{scrollbar-color:#3a3a46 transparent}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:330 16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.14px;display:flex}
+.serif{font-weight:340;letter-spacing:-.96px}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;font-weight:480;font-size:15px;line-height:1.2;letter-spacing:-.1px;background:transparent;border:1.5px solid var(--line2);border-radius:50px;padding:10px 18px;transition:transform .08s,border-color .15s}
+button:hover{border-color:#fff}
+button:active{transform:scale(.97)}
+button.pri{background:var(--cy);border-color:var(--cy);color:#000}
+button.pri:hover{border-color:#fff}
+button.pri:active{background:var(--cy-d)}
+button.wht{background:#fff;border-color:#fff;color:#000}
+button:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
+aside{width:296px;background:var(--bg);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:18px;gap:16px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:540;letter-spacing:-.3px}
+.brand small{font:400 11px/1 "JetBrains Mono",monospace;letter-spacing:.6px;color:var(--cy);border:1px solid var(--cy);border-radius:999px;padding:4px 8px}
+.seg{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--line2);border-radius:50px;padding:3px;gap:3px}
+.seg button{border:0;padding:9px 6px;font-size:14px;white-space:nowrap}
+.seg button[aria-pressed=true]{background:var(--cy);color:#000}
+.seg button[aria-pressed=false]:hover{background:var(--s3)}
+.lbl{font:400 11px/1 "JetBrains Mono",monospace;letter-spacing:.6px;text-transform:uppercase;color:var(--soft)}
+.list{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;min-height:0}
+.item{display:flex;align-items:center;border:1px solid var(--line);border-radius:14px;background:var(--s1)}
+.item.on{border-color:var(--cy);background:#0a2a32}
+.item .t{flex:1;text-align:left;border:0;border-radius:14px;font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:10px 12px}
+.item .x{width:30px;height:30px;padding:0;margin-right:4px;border:0;border-radius:50%;color:var(--soft);display:grid;place-items:center;flex:none}
+.item .x:hover{background:var(--s3);color:#fff}
+.file{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:13px;color:#e2e2ea;padding:8px 12px;border:1px dashed var(--line2);border-radius:12px;word-break:break-all}
+.file button{border:0;padding:2px 6px;color:var(--soft);border-radius:50%}
+.file button:hover{color:#fff;background:var(--s3)}
+.chip{font:400 11px/1 "JetBrains Mono",monospace;letter-spacing:.6px;text-transform:uppercase;border:1px solid var(--line2);border-radius:999px;padding:7px 12px;color:var(--soft);align-self:flex-start}
+main{flex:1;display:flex;flex-direction:column;min-width:0}
+header{display:flex;align-items:center;gap:12px;height:60px;padding:0 28px;border-bottom:1px solid var(--line);flex:none}
+header h1{margin:0;font-size:20px;font-weight:540;letter-spacing:-.26px;flex:1}
+#menu{display:none;width:40px;height:40px;padding:0;border-radius:50%;background:var(--s2);place-items:center}
+#feed{flex:1;overflow:auto;padding:28px}
+.wrap{max-width:840px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.msg{padding:14px 18px;border-radius:20px;background:var(--s1);border:1px solid var(--line);max-width:92%}
+.msg.u{align-self:flex-end;background:#0d2a33;border-color:#1d5666;border-radius:20px 20px 6px 20px;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.b{align-self:flex-start;border-radius:20px 20px 20px 6px}
+.src{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:480;line-height:1;letter-spacing:0;padding:6px 12px;border-radius:50px;margin-bottom:10px;color:#000;background:var(--soft)}
+.doc .src{background:var(--lilac)}.web .src{background:var(--mint)}.calc .src{background:var(--cream)}.multi .src{background:var(--lime)}.none .src{background:var(--pink)}.ai .src{background:var(--coral)}
+.empty{background:var(--navy);border-radius:24px;padding:48px;margin-top:4vh}
+.eyebrow{font:400 12px/1 "JetBrains Mono",monospace;letter-spacing:.6px;text-transform:uppercase;color:var(--lilac)}
+.empty h2{font-size:clamp(34px,5vw,56px);line-height:1.05;letter-spacing:-1.4px;margin:14px 0 12px}
+.empty p{color:#dedcf5;font-size:18px;font-weight:320;margin:0;max-width:520px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.sg{border:0;background:var(--lime);color:#000}
+.sg:nth-child(2){background:var(--lilac)}.sg:nth-child(3){background:var(--mint)}
+.sg:nth-child(odd){transform:rotate(-1deg)}.sg:nth-child(even){transform:rotate(1deg)}
+.row{display:flex;gap:8px;margin-top:10px}
+footer{padding:12px 28px 20px;flex:none}
+form.comp{max-width:840px;margin:0 auto;display:flex;align-items:center;gap:8px;background:var(--s2);border:1.5px solid var(--line2);border-radius:32px;padding:8px 8px 8px 10px}
+form.comp input[type=text]{flex:1;background:transparent;border:0;outline:0;padding:6px 8px;min-width:0;font-size:16px}
+form.comp input::placeholder{color:#9a9aa8}
+form.comp:focus-within{border-color:var(--cy);outline:2px solid rgba(34,211,238,.35)}
+.hint{max-width:840px;margin:10px auto 0;font:400 11px/1 "JetBrains Mono",monospace;letter-spacing:.6px;text-transform:uppercase;color:var(--soft);text-align:center}
+dialog{background:var(--s1);color:var(--ink);border:1px solid var(--line2);border-radius:24px;padding:32px;width:min(420px,92vw)}
+dialog::backdrop{background:rgba(0,0,0,.78)}
+dialog h2{margin:0 0 6px;font-size:34px;line-height:1.1}
+dialog label{display:block;margin-top:16px;font-size:14px;font-weight:480;color:var(--soft)}
+dialog input{width:100%;margin-top:6px;background:#000;border:1.5px solid var(--line2);border-radius:8px;padding:12px 14px;font-size:16px}
+dialog input:focus{border-color:var(--cy);outline:0}
+#err{color:var(--err);font-size:14px;min-height:20px;margin-top:10px}
+.md{overflow-wrap:anywhere}.md>:last-child{margin-bottom:0}.md>:first-child{margin-top:0}.md p{margin:0 0 .7em}
+.md h1,.md h2,.md h3,.md h4{font-weight:540;line-height:1.25;letter-spacing:-.26px;margin:.9em 0 .4em;color:#fff}.md h1{font-size:1.5em}.md h2{font-size:1.3em}.md h3{font-size:1.12em}
+.md strong{color:#fff;font-weight:600}.md ul,.md ol{padding-left:1.4em;margin:0 0 .7em}.md li{margin:.2em 0}
+.md code{font-family:"JetBrains Mono",monospace;background:#000;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.88em}
+.md pre{background:#000;border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto}.md pre code{border:0;padding:0}
+.md table{border-collapse:collapse;display:block;overflow:auto;margin:0 0 .7em}.md th,.md td{border:1px solid var(--line2);padding:7px 12px}.md th{background:var(--s3)}
+.md blockquote{margin:0 0 .7em;padding-left:14px;border-left:3px solid var(--cy);color:var(--soft)}
+.md a{color:var(--cy)}.md hr{border:0;border-top:1px solid var(--line)}
+.md .katex{font-size:1.12em}.md .katex-display{overflow-x:auto;overflow-y:hidden;padding:6px 0;margin:.6em 0}
+[hidden]{display:none!important}.act .src{background:var(--cy)}
+.ct{flex:1;min-width:0;padding:8px 12px;display:flex;flex-direction:column}.ct b{font-weight:540}.ct span{font-size:12px;color:var(--soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acard{margin-top:12px;border:1px solid var(--line2);border-radius:16px;background:#000;padding:14px;display:flex;flex-direction:column;gap:6px}
+.abody{white-space:pre-wrap;overflow-wrap:anywhere;border-left:3px solid var(--cy);padding-left:12px;margin:4px 0}
+.astat{font-weight:480;margin-top:6px}.astat.sent{color:var(--mint)}.astat.failed{color:var(--err)}.astat.cancelled,.astat.expired{color:var(--soft)}
+@media(max-width:800px){aside{position:fixed;inset:0 auto 0 0;z-index:5;transform:translateX(-100%);transition:transform .2s;padding-top:calc(18px + env(safe-area-inset-top,0px));border-right:1px solid var(--line2)}aside.open{transform:none}#menu{display:grid}header{padding:0 16px}#feed{padding:16px}footer{padding:10px 14px 16px}.empty{padding:28px}}
+</style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+</head>
+<body>
+<aside id="side" aria-label="Sidebar">
+  <div class="brand serif"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 2.5l11.7 6.75v13.5L16 29.5 4.3 22.75V9.25z"/><circle cx="9" cy="11" r="1.6" fill="#22d3ee"/><circle cx="9" cy="21" r="1.6" fill="#22d3ee"/><circle cx="23" cy="16" r="2.4" fill="#22d3ee"/><path d="M9 11l7 5M9 21l7-5M16 16h5"/></svg>Agent Conflux <small>2.1</small></div>
+  <div class="seg" role="group" aria-label="Workspace mode">
+    <button id="mPub" aria-pressed="true">Public Chat</button>
+    <button id="mPri" aria-pressed="false">🔒 Private Work</button>
+  </div>
+  <button class="pri" id="newBtn">+ New chat</button>
+  <div class="lbl">Chats</div>
+  <div class="list" id="hist"></div>
+  <div class="lbl" id="docLbl">Documents</div>
+  <div class="list" id="docs" style="flex:none;max-height:150px"></div>
+  <div class="lbl" id="conLbl" hidden>Contacts</div>
+  <div class="list" id="cons" style="flex:none;max-height:230px" hidden></div>
+  <button id="addCon" hidden>+ Add contact</button>
+  <span class="chip" id="mockChip">Loading…</span>
+  <button id="outBtn" class="wht" hidden>Sign out</button>
+</aside>
+<main>
+  <header><button id="menu" aria-label="Open menu">☰</button><h1 class="serif" id="title">Public workspace</h1><span class="chip" id="who">Documents · Web · Calculator · Images</span></header>
+  <div id="feed"><div class="wrap" id="msgs"></div></div>
+  <footer>
+    <form class="comp" id="f">
+      <button type="button" id="attach" aria-label="Attach file">📎 Attach</button>
+      <input type="file" id="file" hidden multiple accept=".pdf,.txt,.docx,.csv,.xlsx,image/*">
+      <input type="text" id="q" placeholder="Ask a question, calculate, or attach a document…" aria-label="Message" autocomplete="off">
+      <button class="pri" type="submit">Send</button>
+    </form>
+    <div class="hint">Every answer shows its sources.</div>
+  </footer>
+</main>
+<dialog id="cdlg"><form id="cf" onsubmit="return false"><h2 class="serif" id="cTitle">Add contact</h2>
+<div style="color:var(--soft);font-size:14px">Name it the way you will say it, for example “Driver” or “Rahul”.</div>
+<label>Name<input id="cn" maxlength="60"></label><label>Email<input id="ce" type="email" autocomplete="off"></label>
+<label>Phone (with country code)<input id="cp" placeholder="+919876543210" autocomplete="off"></label>
+<div id="cerr" role="alert" style="color:var(--err);font-size:14px;min-height:20px;margin-top:10px"></div>
+<div class="row" style="justify-content:flex-end"><button type="button" id="ccancel">Cancel</button><button class="pri" type="submit">Save</button></div></form></dialog>
+<dialog id="login">
+  <form id="lf" method="dialog" onsubmit="return false">
+    <h2 class="serif">Private workspace</h2>
+    <div style="color:var(--soft);font-size:14px">Sign in to use email and phone tools.</div>
+    <label>Username<input id="u" autocomplete="username"></label>
+    <label>Password<input id="p" type="password" autocomplete="current-password"></label>
+    <div id="err" role="alert"></div>
+    <div class="row" style="justify-content:flex-end"><button type="button" id="cancel">Cancel</button><button type="button" id="reg">Create account</button><button class="pri" type="submit" id="go">Sign in</button></div>
+    <div style="font-size:12px;color:var(--soft);margin-top:12px">First time here? Choose a username and a 10+ character password, then press Create account.</div>
+  </form>
+</dialog>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/*MD*/
+function renderMd(src){
+  if(typeof marked==='undefined'||typeof DOMPurify==='undefined')return esc(src).replace(/\n/g,'<br>');
+  const code=[],math=[];
+  let s=String(src).replace(/```[\s\S]*?```|`[^`\n]*`/g,m=>{code.push(m);return '@@C'+(code.length-1)+'@@'});
+  const keep=(t,d)=>{math.push([t,d]);return '@@M'+(math.length-1)+'@@'};
+  s=s.replace(/\$\$([\s\S]+?)\$\$/g,(_,t)=>keep(t,1)).replace(/\\\[([\s\S]+?)\\\]/g,(_,t)=>keep(t,1))
+     .replace(/\\\(([\s\S]+?)\\\)/g,(_,t)=>keep(t,0))
+     .replace(/(?<![\\$\d])\$([^\s$](?:[^$\n]*?[^\s$])?)\$(?!\d)/g,(_,t)=>keep(t,0));
+  s=s.replace(/@@C(\d+)@@/g,(_,i)=>code[i]);
+  const html=DOMPurify.sanitize(marked.parse(s,{breaks:true}));
+  return html.replace(/@@M(\d+)@@/g,(_,i)=>{const [t,d]=math[i];
+    if(typeof katex==='undefined')return esc(t);
+    try{return katex.renderToString(t,{displayMode:!!d,throwOnError:false})}catch(e){return esc(t)}});
+}
+if(typeof DOMPurify!=='undefined')DOMPurify.addHook('afterSanitizeAttributes',n=>{if(n.tagName==='A'){n.setAttribute('target','_blank');n.setAttribute('rel','noopener noreferrer')}});
+/*ENDMD*/
+let mode='public',authed=false,chats=[],docs=[],cons=[],editId=null,cur=null,msgs=[],busy=false;
+const N={doc:'📄 Uploaded Document',web:'🌐 Agentic Search',calc:'🧮 Calculative Source',ai:'🧠 AI Knowledge',act:'✉️ Private Action'};
+async function api(m,u,b){const o={method:m,credentials:'same-origin'};
+ if(b instanceof FormData)o.body=b;else if(b){o.headers={'Content-Type':'application/json'};o.body=JSON.stringify(b)}
+ const r=await fetch('/api/'+u,o);let d={};try{d=await r.json()}catch(e){}
+ if(!r.ok){const e=new Error(typeof d.detail==='string'?d.detail:'Request failed');e.status=r.status;throw e}return d}
+function lost(e){if(e.status===401&&mode==='private'){authed=false;mode='public';cur=null;msgs=[];refresh();$('#login').showModal();return true}alert(e.message);return false}
+async function refresh(){try{chats=await api('GET',mode+'/chats');docs=await api('GET',mode+'/docs');if(mode==='private')cons=await api('GET','private/contacts')}catch(e){lost(e)}render()}
+async function openChat(id){cur=id;try{msgs=await api('GET',`${mode}/chats/${id}/messages`)}catch(e){lost(e)}render()}
+async function setMode(m){mode=m;cur=null;msgs=[];$('#side').classList.remove('open');await refresh()}
+const parts=s=>(s||'').split(',').filter(x=>N[x]);
+const label=s=>{const p=parts(s);return p.length?(p.length>1?'Sources: ':'Source: ')+p.map(x=>N[x]).join(' + '):'ℹ️ No source found'};
+const cls=s=>{const p=parts(s);return p.length>1?'multi':p[0]||'none'};
+function actCard(a){if(!a)return'';const em=a.kind==='email';
+ const d=`<div class="acard"><div class="eyebrow">${em?'Email draft':'Call script'}</div><div><b>To:</b> ${esc(a.to)}</div>${em?`<div><b>Subject:</b> ${esc(a.subject)}</div>`:''}<div class="abody">${esc(a.body)}</div>`;
+ if(a.status==='pending')return d+`<div class="row"><button class="pri" data-a="confirm:${a.id}">${em?'Confirm &amp; send email':'Confirm &amp; place call'}</button><button data-a="cancel:${a.id}">Cancel</button></div></div>`;
+ const mock=a.status==='sent'&&/^Mock/.test(a.result||''),T={sent:'✔ ',failed:'✖ ',sending:'⏳ '};
+ const t=a.status==='cancelled'?'Cancelled. Nothing was sent.':a.status==='expired'?'Expired. Ask me again to prepare a new draft.':(a.result||a.status);
+ return d+`<div class="astat ${a.status}">${mock?'🧪 ':T[a.status]||''}${esc(t)}</div></div>`}
+function render(){
+ $('#mPub').setAttribute('aria-pressed',mode==='public');$('#mPri').setAttribute('aria-pressed',mode==='private');
+ $('#title').textContent=mode==='public'?'Public chat':'Private work';
+ $('#who').textContent=mode==='public'?'Documents · Web · Calculator':'Email · Phone · Contacts';
+ const pv=mode==='private';$('#docLbl').hidden=pv;$('#docs').hidden=pv;$('#conLbl').hidden=!pv;$('#cons').hidden=!pv;$('#addCon').hidden=!pv;$('#attach').hidden=pv;
+ $('#q').placeholder=pv?'Tell me who to email or call, and what to say…':'Ask a question, calculate, or attach a document…';
+ $('#cons').innerHTML=cons.map(c=>`<div class="item"><div class="ct"><b>${esc(c.name)}</b><span>${esc([c.email,c.phone].filter(Boolean).join(' · '))}</span></div><button class="x" data-ce="${c.id}" aria-label="Edit contact">✎</button><button class="x" data-cd="${c.id}" aria-label="Delete contact">✕</button></div>`).join('')||'<div class="file">No contacts yet. Add one to start.</div>';
+ $('#outBtn').hidden=!authed;
+ $('#hist').innerHTML=chats.map(x=>`<div class="item ${x.id===cur?'on':''}"><button class="t" data-o="${x.id}">${esc(x.title)}</button><button class="x" data-r="${x.id}" aria-label="Rename">✎</button><button class="x" data-d="${x.id}" aria-label="Delete">✕</button></div>`).join('')||'<div class="file">No chats yet</div>';
+ $('#docs').innerHTML=docs.map(d=>`<div class="file"><span>📎 ${esc(d.filename)}</span><button data-dd="${d.id}" aria-label="Remove file">✕</button></div>`).join('')||'<div class="file">No files uploaded</div>';
+ $('#msgs').innerHTML=(!msgs.length&&!busy?`<div class="empty"><div class="eyebrow">${mode==='public'?'Public chat':'Private work'}</div><h2 class="serif">${mode==='public'?'How can I help today?':'What should I send?'}</h2><p>${mode==='public'?'Upload a document, ask about it, or try “What is 25% of 800?”.':'Tell me who to email or call. I will draft it, you confirm, and only then does it go out.'}</p><div class="chips">${mode==='public'?'<button class="sg" data-s="Summarize my uploaded document">Summarize my document</button><button class="sg" data-s="What is 25% of 800?">Calculate 25% of 800</button><button class="sg" data-s="Search the web for the latest news about AI agents">Search the web</button>':'<button class="sg" data-s="Email my driver: I will be 30 minutes late">Email my driver</button><button class="sg" data-s="Call Rahul and tell him the meeting is at 9 PM">Call with a message</button><button class="sg" data-s="Share the plan for today with my team lead by email">Share an update</button>'}</div></div>`:'')+
+  msgs.map(m=>m.role==='user'?`<div class="msg u">${esc(m.text)}</div>`:`<div class="msg b ${cls(m.source)}"><span class="src">${label(m.source)}</span><div class="md">${renderMd(m.text)}</div>${actCard(m.action)}</div>`).join('')+
+  (busy?'<div class="msg b none"><span class="src">⏳ Working</span><div>Thinking…</div></div>':'');
+ $('#feed').scrollTop=1e9}
+$('#f').onsubmit=async e=>{e.preventDefault();const t=$('#q').value.trim();if(!t||busy)return;busy=true;$('#q').value='';
+ try{if(!cur)cur=(await api('POST',mode+'/chats')).id;msgs.push({role:'user',text:t});render();await api('POST',`${mode}/chats/${cur}/send`,{text:t})}
+ catch(x){if(!lost(x))msgs.push({role:'bot',text:'Something went wrong: '+x.message,source:''})}
+ busy=false;if(cur){try{msgs=await api('GET',`${mode}/chats/${cur}/messages`);chats=await api('GET',mode+'/chats')}catch(x){}}render()};
+$('#hist').onclick=async e=>{const d=e.target.dataset;
+ try{if(d.o)return openChat(+d.o);
+  if(d.d){await api('DELETE',`${mode}/chats/${d.d}`);if(cur==d.d){cur=null;msgs=[]}}
+  if(d.r){const x=chats.find(x=>x.id==d.r),n=prompt('Rename chat',x.title);if(n)await api('PATCH',`${mode}/chats/${d.r}`,{text:n})}
+ }catch(x){lost(x)}refresh()};
+$('#docs').onclick=async e=>{const id=e.target.dataset.dd;if(!id)return;try{await api('DELETE',`${mode}/docs/${id}`)}catch(x){lost(x)}refresh()};
+$('#file').onchange=async e=>{const fs=[...e.target.files];e.target.value='';$('#attach').disabled=true;$('#attach').textContent='Uploading…';
+ for(const f of fs){const fd=new FormData();fd.append('file',f);try{await api('POST',mode+'/docs',fd)}catch(x){if(lost(x))break}}
+ $('#attach').disabled=false;$('#attach').textContent='📎 Attach';refresh()};
+$('#msgs').onclick=async e=>{const d=e.target.dataset;if(d.s){$('#q').value=d.s;$('#q').focus();return}
+ if(d.a){const[k,id]=d.a.split(':');e.target.disabled=true;try{await api('POST',`private/actions/${id}/${k}`)}catch(x){lost(x)}
+  try{msgs=await api('GET',`${mode}/chats/${cur}/messages`)}catch(x){}render()}};
+function openC(c){editId=c?c.id:null;$('#cTitle').textContent=c?'Edit contact':'Add contact';$('#cn').value=c?c.name:'';$('#ce').value=c?c.email:'';$('#cp').value=c?c.phone:'';$('#cerr').textContent='';$('#cdlg').showModal();$('#cn').focus()}
+$('#addCon').onclick=()=>openC();$('#ccancel').onclick=()=>$('#cdlg').close();
+$('#cf').onsubmit=async e=>{e.preventDefault();const b={name:$('#cn').value,email:$('#ce').value,phone:$('#cp').value};
+ try{editId?await api('PATCH','private/contacts/'+editId,b):await api('POST','private/contacts',b);$('#cdlg').close();await refresh()}catch(x){$('#cerr').textContent=x.message}};
+$('#cons').onclick=async e=>{const d=e.target.dataset;if(d.ce)openC(cons.find(c=>c.id==d.ce));
+ if(d.cd&&confirm('Delete this contact?')){try{await api('DELETE','private/contacts/'+d.cd)}catch(x){lost(x)}refresh()}};
+$('#attach').onclick=()=>$('#file').click();
+$('#newBtn').onclick=()=>{cur=null;msgs=[];$('#side').classList.remove('open');render()};
+$('#menu').onclick=()=>$('#side').classList.toggle('open');
+$('#mPub').onclick=()=>setMode('public');
+$('#mPri').onclick=()=>{if(authed)setMode('private');else{$('#err').textContent='';$('#login').showModal();$('#u').focus()}};
+$('#cancel').onclick=()=>$('#login').close();
+async function auth(reg){const u=$('#u').value.trim(),p=$('#p').value;
+ if(!u||p.length<(reg?10:1)){$('#err').textContent=reg?'Use a username and a 10+ character password.':'Enter your username and password.';return}
+ try{if(reg)await api('POST','auth/register',{username:u,password:p});await api('POST','auth/login',{username:u,password:p});
+  authed=true;$('#p').value='';$('#login').close();await setMode('private')}catch(e){$('#err').textContent=e.message}}
+$('#lf').onsubmit=e=>{e.preventDefault();auth(false)};$('#reg').onclick=()=>auth(true);
+$('#outBtn').onclick=async()=>{try{await api('POST','auth/logout')}catch(e){}authed=false;await setMode('public')};
+(async()=>{try{const c=await api('GET','config');$('#mockChip').textContent=`AI: ${c.llm?'Gemini on':'off (basic mode)'} · Web: ${c.web?'on':'off'}`;authed=(await api('GET','auth/me')).authed}catch(e){}refresh()})();
+</script>
+</body></html>
